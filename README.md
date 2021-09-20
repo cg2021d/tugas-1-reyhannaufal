@@ -6,15 +6,15 @@ NRP: 0511194000171
 
 Kelas: Grafika Komputer - D
 
-## Dompet
+## Ipad
 <p float='left'>
-  <img src="https://user-images.githubusercontent.com/59334824/133932569-9f699e94-ddeb-4824-80f4-ca06370e7a80.jpg" alt="dompet" width="200"/>
-  <img src="https://user-images.githubusercontent.com/59334824/133932573-c057f05d-0e75-4951-9ec0-b38b826abf90.jpg" alt="dompet" width="200"/>
-  <img src="https://user-images.githubusercontent.com/59334824/133932577-c2b59cb4-bfba-4889-ba14-7fccf54fc97d.jpg" alt="dompet" width="200"/>
+  <img src="https://user-images.githubusercontent.com/59334824/134023022-5a42d231-3df8-414d-9fd7-04cf54e56661.jpg" alt="dompet" width="200"/>
+  <img src="https://user-images.githubusercontent.com/59334824/134023037-aea7b3fc-d2a8-41d1-96aa-a77aea84271f.jpg" alt="dompet" width="200"/>
+  <img src="https://user-images.githubusercontent.com/59334824/134023045-9ead57dc-ae92-438c-9fa4-98228746ecdd.jpg" alt="dompet" width="200"/>
+  <img src="https://user-images.githubusercontent.com/59334824/134023038-12c473c6-b097-475a-9b02-9d9a7e10899d.jpg" alt="dompet" width="200"/>
 </p>
-<img src="https://user-images.githubusercontent.com/59334824/133932568-a19218bf-7ce4-49b6-bddd-bf17dd5807ca.jpg" alt="dompet" width="200"/>
 
 
 
 
-  
+
