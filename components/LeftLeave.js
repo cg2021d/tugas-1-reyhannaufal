@@ -1,5 +1,6 @@
-import { rightVertices } from "../constant/vertices";
-export default function rightLeaf(gl) {
+import { leftVertices } from "../constants/vertices";
+
+export default function LeftLeave(gl) {
   const vertices = [
     -0.5, 0.5, 1.0, 0.0, 0.0, 0.5, 0.5, 0.0, 1.0, 0.0, 0.5, -0.5, 1.0, 0.0, 0.0,
     -0.5, -0.5, 0.0, 0.0, 1.0,
@@ -9,7 +10,7 @@ export default function rightLeaf(gl) {
   gl.bindBuffer(gl.ARRAY_BUFFER, vertexBuffer);
   gl.bufferData(
     gl.ARRAY_BUFFER,
-    new Float32Array(rightVertices),
+    new Float32Array(leftVertices),
     gl.STATIC_DRAW
   );
 
@@ -70,11 +71,24 @@ export default function rightLeaf(gl) {
   );
   gl.enableVertexAttribArray(a_color);
 
-  const speedRaw = 4;
+  const speedRaw = 5;
   let speed = speedRaw / 600;
   let change = 0;
   const uChange = gl.getUniformLocation(shaderProgram, "uChange");
+
   gl.uniform1f(uChange, 0);
 
-  gl.drawArrays(gl.LINE_LOOP, 0, 2);
+  gl.drawArrays(gl.LINES, 0, 4);
+  // function render() {
+  //   if ((change >= 0.5) | (change <= -0.5)) {
+  //     speed = -speed;
+  //   }
+  //   change += speed;
+  //   gl.uniform1f(uChange, change);
+  //   // gl.clearColor(0, 0, 0, 1);
+  //   // gl.clear(gl.COLOR_BUFFER_BIT);
+  //   requestAnimationFrame(render);
+  // }
+
+  // render();
 }

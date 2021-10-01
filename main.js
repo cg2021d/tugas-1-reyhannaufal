@@ -1,7 +1,7 @@
 import "./style.css";
 
-import leaftLeaf from "./components/leftLeaf";
-import rightLeaf from "./components/rightLeaf";
+import LeaftLeave from "./components/LeftLeave";
+import RightLeave from "./components/RightLeave";
 
 function main() {
   const canvas = document.getElementById("webgl");
@@ -10,8 +10,8 @@ function main() {
     return;
   }
 
-  leaftLeaf(gl);
-  rightLeaf(gl);
+  LeaftLeave(gl);
+  RightLeave(gl);
 
   // function render() {
   //   if ((change >= 0.5) | (change <= -0.5)) {

@@ -1,5 +1,6 @@
-import { leftVertices } from "../constant/vertices";
-export default function leaftLeaf(gl) {
+import { rightVertices } from "../constants/vertices";
+
+export default function RightLeave(gl) {
   const vertices = [
     -0.5, 0.5, 1.0, 0.0, 0.0, 0.5, 0.5, 0.0, 1.0, 0.0, 0.5, -0.5, 1.0, 0.0, 0.0,
     -0.5, -0.5, 0.0, 0.0, 1.0,
@@ -9,7 +10,7 @@ export default function leaftLeaf(gl) {
   gl.bindBuffer(gl.ARRAY_BUFFER, vertexBuffer);
   gl.bufferData(
     gl.ARRAY_BUFFER,
-    new Float32Array(leftVertices),
+    new Float32Array(rightVertices),
     gl.STATIC_DRAW
   );
 
