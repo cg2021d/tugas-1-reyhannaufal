@@ -1,8 +1,7 @@
 # Tugas Three.js
 
-## Development
+### Development
 
-Run this followed commands:
 
 ```bash
 # Install dependencies (only the first time)
