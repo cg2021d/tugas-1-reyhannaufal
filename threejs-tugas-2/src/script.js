@@ -7,26 +7,11 @@ import {
   hemisphereLight,
   rectAreaLight,
   spotLight,
-} from "../../threejs-tugas-2/lights/rootLights";
+} from "../lights/rootLights";
 
 const canvas = document.querySelector("canvas.app");
 
 const scene = new THREE.Scene();
-
-/*
- * Textures
- */
-const cubeTextureLoader = new THREE.CubeTextureLoader();
-const environmentMapTexture = cubeTextureLoader.load([
-  "/textures/environmentMaps/1/px.jpg",
-  "/textures/environmentMaps/1/nx.jpg",
-  "/textures/environmentMaps/1/py.jpg",
-  "/textures/environmentMaps/1/ny.jpg",
-  "/textures/environmentMaps/1/pz.jpg",
-  "/textures/environmentMaps/1/nz.jpg",
-]);
-
-scene.background = environmentMapTexture;
 
 /*
  * Lights
@@ -64,7 +49,7 @@ const cone = new THREE.Mesh(
   new THREE.MeshStandardMaterial({
     metalness: 0.7,
     roughness: 0.5,
-    envmap: environmentMapTexture,
+    // envmap: environmentMapTexture,
   })
 );
 cone.position.x = 2;
