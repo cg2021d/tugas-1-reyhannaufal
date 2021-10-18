@@ -14,8 +14,9 @@ export const hemisphereLight = new THREE.HemisphereLight(
   0.3
 );
 
-export const pointLight = new THREE.PointLight(0xff90000, 0.5, 10, 2);
-pointLight.position.set(2, -0.5, 1);
+export const pointLight = new THREE.PointLight(0xffffff, 2, 500);
+pointLight.castShadow = true;
+pointLight.position.set(0, 50, 30);
 
 export const rectAreaLight = new THREE.RectAreaLight(0x4e00ff, 2, 1, 1);
 rectAreaLight.lookAt(new THREE.Vector3(-2, 0, 1.5));

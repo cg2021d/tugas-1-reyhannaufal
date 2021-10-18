@@ -1,141 +1,169 @@
 import "./style.css";
 import * as THREE from "three";
+
 import { OrbitControls } from "three/examples/jsm/controls/OrbitControls.js";
-import {
-  ambientLight,
-  directionalLight,
-  hemisphereLight,
-  rectAreaLight,
-  spotLight,
-} from "../lights/rootLights";
+import { generateBox } from "./utils/generateBox";
+import { SIZES } from "./constants/sizes";
+import { pointLight } from "./lights/rootLights";
 
 const canvas = document.querySelector("canvas.app");
 
 const scene = new THREE.Scene();
+scene.background = new THREE.Color(0xd2d2d2);
 
-/*
- * Lights
- */
-scene.add(
-  ambientLight,
-  directionalLight,
-  hemisphereLight,
-  rectAreaLight,
-  spotLight
+const loader = new THREE.TextureLoader();
+const texture = loader.load(
+  "https://threejsfundamentals.org/threejs/resources/images/equirectangularmaps/tears_of_steel_bridge_2k.jpg",
+  () => {
+    const rt = new THREE.WebGLCubeRenderTarget(texture.image.height);
+    rt.fromEquirectangularTexture(renderer, texture);
+    scene.background = rt.texture;
+  }
 );
 
-/*
- * Object
- */
-const torus = new THREE.Mesh(
-  new THREE.TorusGeometry(20, 3, 10, 100),
-  new THREE.MeshBasicMaterial({
-    color: new THREE.Color("pink"),
-  })
+scene.add(pointLight);
+
+window.addEventListener("resize", () => {
+  SIZES.width = window.innerWidth;
+  SIZES.height = window.innerHeight;
+
+  camera.aspect = SIZES.width / SIZES.height;
+  camera.updateProjectionMatrix();
+
+  renderer.setSize(SIZES.width, SIZES.height);
+  renderer.setPixelRatio(Math.min(window.devicePixelRatio, 2));
+});
+
+
+const camera = new THREE.PerspectiveCamera(
+  70,
+  SIZES.width / SIZES.height,
+  0.1,
+  1000
 );
-torus.position.z = -10;
-
-const cylinder = new THREE.Mesh(
-  new THREE.CylinderGeometry(0.5, 0.5, 1, 32),
-  new THREE.MeshNormalMaterial({
-    flatShading: true,
-  })
-);
-cylinder.position.x = 0.2;
-cylinder.position.y = 0.8;
-
-const cone = new THREE.Mesh(
-  new THREE.ConeGeometry(0.5, 1, 32),
-  new THREE.MeshStandardMaterial({
-    metalness: 0.7,
-    roughness: 0.5,
-    // envmap: environmentMapTexture,
-  })
-);
-cone.position.x = 2;
-cone.position.y = 0.8;
-
-const octhaHedron = new THREE.Mesh(
-  new THREE.OctahedronGeometry(1, 0),
-  new THREE.MeshStandardMaterial({
-    color: 0x49ef4,
-    wireframe: true,
-  })
-);
-octhaHedron.position.x = -2;
-octhaHedron.position.y = 0.8;
-
-const floor = new THREE.Mesh(
-  new THREE.PlaneBufferGeometry(10, 10),
-  new THREE.MeshToonMaterial({
-    depthTest: true,
-    depthWrite: true,
-  })
-);
-floor.rotation.x = -Math.PI * 0.5;
-floor.position.y = -0.65;
-
-scene.add(torus, cylinder, cone, octhaHedron, floor);
-
-/*
- * Sizes
- */
-const sizes = {
-  width: window.innerWidth,
-  height: window.innerHeight,
-};
-
-/*
- * Camera
- */
-const camera = new THREE.PerspectiveCamera(100, sizes.width / sizes.height);
-camera.position.z = 3.5;
+camera.position.set(0, 10, 50);
 scene.add(camera);
 
-/*
- * Control
- */
 const controls = new OrbitControls(camera, canvas);
 controls.enableDamping = true;
 
-window.addEventListener("resize", () => {
-  //update size
-  sizes.width = window.innerWidth;
-  sizes.height = window.innerHeight;
+const currentScoreElement = document.getElementById("score");
+const hightScoreElement = document.getElementById("high-score");
+const rightPair = 50;
+const wrongPair = -20;
 
-  //update camera
-  camera.aspect = sizes.width / sizes.height;
-  camera.updateProjectionMatrix();
+let currentScore = 0;
+let highScore = 0;
 
-  //update canvas
-  renderer.setSize(sizes.width, sizes.height);
-});
 
-/**
- * Renderer
- */
+let selectedObject = [];
+let originalColors = [];
+
+const disposeObject = () => {
+  let first = selectedObject[0].material.color.getHex();
+  let second = selectedObject[1].material.color.getHex();
+
+  if (first === second) {
+    selectedObject.forEach((object) => {
+      object.geometry.dispose();
+      object.material.dispose();
+      scene.remove(object);
+      renderer.renderLists.dispose();
+    });
+    currentScore += rightPair;
+  } else {
+    currentScore += wrongPair;
+  }
+  currentScoreElement.innerHTML = currentScore;
+  originalColors = [];
+  selectedObject = [];
+};
+
+const rayCast = new THREE.Raycaster();
+const mouse = new THREE.Vector2();
+mouse.setX(-1);
+mouse.setY(-1);
+
+const onMouseClick = (e) => {
+  mouse.x = (e.clientX / window.innerWidth) * 2 - 1;
+  mouse.y = -(e.clientY / window.innerHeight) * 2 + 1;
+  rayCast.setFromCamera(mouse, camera);
+
+  let intersects = rayCast.intersectObjects(scene.children, false);
+
+  if (intersects[0]) {
+    let firstObject = intersects[0].object;
+    if (selectedObject.length > 0) {
+      if (firstObject.uuid === selectedObject[0].uuid) {
+        firstObject.material.emissive.setHex(0x000000);
+        selectedObject = [];
+        originalColors = [];
+        return;
+      }
+    }
+
+    selectedObject.push(firstObject);
+    originalColors.push(firstObject.material.color.getHex());
+    if (selectedObject.length > 1) {
+      disposeObject();
+    }
+  }
+};
+
+document.addEventListener("click", onMouseClick);
+
+for (let i = 0; i < 30; i++) {
+  generateBox(scene);
+}
+
+
+
 const renderer = new THREE.WebGLRenderer({
   canvas: canvas,
 });
-renderer.setSize(sizes.width, sizes.height);
+renderer.setSize(SIZES.width, SIZES.height);
 renderer.setPixelRatio(Math.min(window.devicePixelRatio, 2));
+renderer.shadowMap.enabled = true;
+renderer.shadowMap.type = THREE.PCFSoftShadowMap;
 
-function animate() {
-  requestAnimationFrame(animate);
-  torus.rotation.x += 0.01;
-  torus.rotation.y += 0.01;
 
-  cylinder.rotation.x += 0.01;
-  cylinder.rotation.y += 0.01;
 
-  cone.rotation.x += 0.01;
-  cone.rotation.y += 0.01;
-  cone.rotation.z += 0.01;
+const clock = new THREE.Clock();
 
-  octhaHedron.rotation.x += 0.01;
-  octhaHedron.rotation.y += 0.01;
+let treshold = 0;
+let speed = 0.002;
+const baseSpeed = 0.002;
 
+const tick = () => {
+  if (scene.children.length >= 40) {
+    treshold = 0;
+    speed = baseSpeed;
+
+    if (currentScore > highScore) {
+      highScore = currentScore;
+      hightScoreElement.innerHTML = highScore;
+    }
+    currentScore = 0;
+    currentScoreElement.innerHTML = currentScore;
+  } else {
+    treshold += speed;
+  }
+
+  if (treshold > 1) {
+    // there is some issue here
+    treshold = 0;
+    speed += 0.002;
+  }
+  const elapsedTime = clock.getElapsedTime();
+
+  if (selectedObject.length > 0) {
+    selectedObject[0].material.emissive.setHex(
+      elapsedTime % 0.5 >= 0.25 ? originalColors[0] : 0x000000
+    );
+  }
   renderer.render(scene, camera);
-}
 
-animate();
+  window.requestAnimationFrame(tick);
+};
+
+tick();
