@@ -1,0 +1,44 @@
+@import url('https://fonts.googleapis.com/css2?family=Inter:wght@500;700&display=swap');
+*
+{ 
+    margin: 0;
+    padding: 0;
+}
+
+html,
+body
+{
+    height: 100vh;
+    font-family: 'Inter';
+}
+
+.app
+{
+    position: fixed;
+    top: 0;
+    left: 0;
+    outline: none;
+}
+
+.board {
+    position: absolute;
+    font-size: 1rem;
+    background-color: bisque;
+    padding: 20px;
+    margin: 20px;
+}
+
+.board > h1 {
+    font-size: 1.25rem;
+    font-weight: 700;
+    margin: 0;
+    color: black;
+    margin: 10px 0
+}
+
+
+.board > p {
+    font-weight: 500;
+    color: black;
+    text-align: center;
+}
