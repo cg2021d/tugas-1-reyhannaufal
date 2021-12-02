@@ -5,7 +5,7 @@ import { GLTFLoader } from "three/examples/jsm/loaders/GLTFLoader.js";
 import { OrbitControls } from "three/examples/jsm/controls/OrbitControls.js";
 import { generateBox } from "./utils/generateBox";
 import { SIZES } from "./constants/sizes";
-import { pointLight } from "./lights/rootLights";
+import { directionalLight, pointLight } from "./lights/rootLights";
 import {
   grassAmbientOcclusionTexture,
   grassColorTexture,
@@ -17,7 +17,7 @@ const canvas = document.querySelector("canvas.app");
 const scene = new THREE.Scene();
 scene.background = new THREE.Color(0xd2d2d2);
 
-scene.add(pointLight);
+scene.add(pointLight, directionalLight);
 /**
  * Implement Panorama
  */
@@ -60,7 +60,6 @@ sphereShadow.receiveShadow = false; //defaul
 sphereShadow.position.set(15, 4, 0);
 scene.add(sphereShadow);
 
-
 const floor = new THREE.Mesh(
   new THREE.PlaneBufferGeometry(50, 50),
   new THREE.MeshPhongMaterial({
@@ -75,7 +74,11 @@ floor.receiveShadow = true;
 
 const sphere = new THREE.Mesh(
   new THREE.SphereBufferGeometry(5, 32, 32),
-  new THREE.MeshPhongMaterial({ color: "#FFA500", specular: 0xffffff })
+  new THREE.MeshPhongMaterial({
+    color: "#FFA500",
+    specular: 0xffffff,
+    shininess: 100,
+  })
 );
 
 scene.add(floor, sphere);
