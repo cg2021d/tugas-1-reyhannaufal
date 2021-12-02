@@ -59,6 +59,7 @@ let highScore = 0;
 let selectedObject = [];
 let originalColors = [];
 
+
 const disposeObject = () => {
   let first = selectedObject[0].material.color.getHex();
   let second = selectedObject[1].material.color.getHex();
@@ -85,10 +86,17 @@ mouse.setX(-1);
 mouse.setY(-1);
 
 const onMouseClick = (e) => {
+  /**
+   * Get mouse position
+   */
+
   mouse.x = (e.clientX / window.innerWidth) * 2 - 1;
   mouse.y = -(e.clientY / window.innerHeight) * 2 + 1;
-  rayCast.setFromCamera(mouse, camera);
 
+  /**
+   * Get intersected object
+  */
+  rayCast.setFromCamera(mouse, camera);
   let intersects = rayCast.intersectObjects(scene.children, false);
 
   if (intersects[0]) {
@@ -112,6 +120,9 @@ const onMouseClick = (e) => {
 
 document.addEventListener("click", onMouseClick);
 
+/**
+ * Genertae 30 box
+ */
 for (let i = 0; i < 30; i++) {
   generateBox(scene);
 }
@@ -135,6 +146,9 @@ let speed = 0.002;
 const baseSpeed = 0.002;
 
 const tick = () => {
+  /**
+   * If length of cube is more than 40. reset score
+   */
   if (scene.children.length >= 40) {
     treshold = 0;
     speed = baseSpeed;
@@ -149,10 +163,17 @@ const tick = () => {
     treshold += speed;
   }
 
+  console.log("%cscript.js line:155 scene", "color: #007acc;", scene.children.length);
+  console.log('%cscript.js line:155 treshold', 'color: #007acc;', treshold);
+
+  /**
+   * Generate more box on certain treshold. interval will be shorten as the time goes by
+   */
   if (treshold > 1) {
-    // there is some issue here
+    generateBox(scene);
     treshold = 0;
-    speed += 0.002;
+    speed += 100;
+    console.log(`new box generated, speed increased to ${speed}`);
   }
   const elapsedTime = clock.getElapsedTime();
 
@@ -161,9 +182,17 @@ const tick = () => {
       elapsedTime % 0.5 >= 0.25 ? originalColors[0] : 0x000000
     );
   }
+
+  
+
+
   renderer.render(scene, camera);
 
   window.requestAnimationFrame(tick);
 };
+
+/**
+ * At first render game will be started automatically after page load
+ */
 
 tick();

@@ -1,5 +1,6 @@
 import "./style.css";
 import * as THREE from "three";
+import { GLTFLoader } from "three/examples/jsm/loaders/GLTFLoader.js";
 
 import { OrbitControls } from "three/examples/jsm/controls/OrbitControls.js";
 import { generateBox } from "./utils/generateBox";
@@ -16,6 +17,10 @@ const canvas = document.querySelector("canvas.app");
 const scene = new THREE.Scene();
 scene.background = new THREE.Color(0xd2d2d2);
 
+scene.add(pointLight);
+/**
+ * Implement Panorama
+ */
 const loader = new THREE.TextureLoader();
 const texture = loader.load("/darkScenary.jpg", () => {
   const rt = new THREE.WebGLCubeRenderTarget(texture.image.height);
@@ -23,7 +28,38 @@ const texture = loader.load("/darkScenary.jpg", () => {
   scene.background = rt.texture;
 });
 
-scene.add(pointLight);
+/**
+ * Implelement Loading Object
+ */
+
+const objectLoader = new GLTFLoader();
+objectLoader.load(
+  "models/house/scene.gltf",
+  function (gltf) {
+    const model = gltf.scene;
+    model.position;
+    model.position.set(0, 0.1, 0);
+    model.scale.set(0.02, 0.02, 0.02);
+    scene.add(model);
+  },
+  undefined,
+  function (error) {
+    console.error(error);
+  }
+);
+
+/**
+ * Implement Shadow
+ */
+
+const sphereGeometry = new THREE.SphereGeometry(5, 32, 32);
+const sphereMaterial = new THREE.MeshStandardMaterial({ color: 0xff0000 });
+const sphereShadow = new THREE.Mesh(sphereGeometry, sphereMaterial);
+sphereShadow.castShadow = true; //default is false
+sphereShadow.receiveShadow = false; //defaul
+sphereShadow.position.set(15, 4, 0);
+scene.add(sphereShadow);
+
 
 const floor = new THREE.Mesh(
   new THREE.PlaneBufferGeometry(50, 50),
@@ -46,6 +82,9 @@ scene.add(floor, sphere);
 sphere.position.y = 10;
 sphere.position.x = -10;
 
+/**
+ * Implement Fog
+ */
 const fog = new THREE.Fog(new THREE.Color("black"), 0.1, 100);
 scene.fog = fog;
 
@@ -76,12 +115,13 @@ const mouse = new THREE.Vector2();
 mouse.setX(-1);
 mouse.setY(-1);
 
-for (let i = 0; i < 10; i++) {
-  generateBox(scene);
-}
+// for (let i = 0; i < 10; i++) {
+//   generateBox(scene);
+// }
 
 const renderer = new THREE.WebGLRenderer({
   canvas: canvas,
+  antialias: true,
 });
 renderer.setSize(SIZES.width, SIZES.height);
 renderer.setPixelRatio(Math.min(window.devicePixelRatio, 2));

@@ -14,3 +14,4 @@ export const grassNormalTexture = textureLoader.load(
 export const grassRoughnessTexture = textureLoader.load(
   "/textures/grass/roughness.jpg"
 );
+
