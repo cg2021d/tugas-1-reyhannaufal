@@ -72,6 +72,9 @@ const floor = new THREE.Mesh(
 floor.rotation.x = -Math.PI / 2;
 floor.receiveShadow = true;
 
+/**
+ * First spehere using meshphongmaterial
+ */
 const sphere = new THREE.Mesh(
   new THREE.SphereBufferGeometry(5, 32, 32),
   new THREE.MeshPhongMaterial({
@@ -80,6 +83,31 @@ const sphere = new THREE.Mesh(
     shininess: 100,
   })
 );
+
+/**
+ * Second sphere using meshStandardMaterial
+ */
+
+const secondSphere = new THREE.Mesh(
+  new THREE.SphereBufferGeometry(5, 32, 32),
+  new THREE.MeshStandardMaterial({
+    color: new THREE.Color("blue"),
+    roughness: 0,
+    metalness: 0.9,
+    emissive: new THREE.Color("white"),
+  })
+);
+const ambientLight = new THREE.AmbientLight(0xffffff, 1);
+// scene.add(ambientLight);
+
+const directionalLightHelper = new THREE.DirectionalLightHelper(
+  directionalLight,
+  10
+);
+const pointLightHelper = new THREE.PointLightHelper(pointLight, 5);
+secondSphere.position.set(-10, 5, 10);
+
+scene.add(secondSphere, directionalLightHelper, pointLightHelper);
 
 scene.add(floor, sphere);
 sphere.position.y = 10;

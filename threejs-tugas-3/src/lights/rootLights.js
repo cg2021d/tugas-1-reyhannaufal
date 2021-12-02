@@ -1,16 +1,16 @@
 import * as THREE from "three";
 
-export const pointLight = new THREE.PointLight(new THREE.Color("gray"), 2, 500);
+export const pointLight = new THREE.PointLight(new THREE.Color("gray"), 2, 200);
 pointLight.castShadow = true;
-pointLight.position.set(0, 10, 30);
+pointLight.position.set(-5, 10, 10);
 pointLight.shadow.mapSize.width = 1024;
 
 /**
  * DirecitonalLight
  */
 export const directionalLight = new THREE.DirectionalLight(
-  new THREE.Color("gray"),
+  new THREE.Color("white"),
   1
 );
 directionalLight.castShadow = true;
-directionalLight.position.set(-20, 20, 30);
+directionalLight.position.set(-20, 10, 30);
